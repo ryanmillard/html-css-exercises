@@ -38,6 +38,10 @@ class LinkedList {
     this.head = node;
 
     this.size += 1;
+
+    if (this.size === 1) {
+      this.tail = node;
+    }
   }
 
   at(index) {
@@ -56,9 +60,10 @@ class LinkedList {
 
   pop() {
     if (this.head === null) return;
-    if (this.tail === null) {
+    if (this.size === 1) {
       this.head = null;
-      this.size -= 1;
+      this.tail = null;
+      this.size = 0;
       return;
     }
 
@@ -75,5 +80,19 @@ class LinkedList {
     previousNode.nextNode = null;
 
     this.size -= 1;
+  }
+
+  contains(value) {
+    if (this.head === null) return false;
+    if (this.size === 1 && this.head.value === value) return true;
+
+    let currentNode = this.head;
+
+    while (currentNode.nextNode) {
+      if (currentNode.value === value) return true;
+      currentNode = currentNode.nextNode
+    }
+
+    return currentNode.value === value;
   }
 }
