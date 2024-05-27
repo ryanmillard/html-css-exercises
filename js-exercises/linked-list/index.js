@@ -18,7 +18,7 @@ class LinkedList {
 
     if (this.head === null) {
       this.head = node;
-    } else if (this.tail === null) {
+    } else if (this.size === 1) {
       this.head.nextNode = node;
       this.tail = node;
     } else {
@@ -84,7 +84,6 @@ class LinkedList {
 
   contains(value) {
     if (this.head === null) return false;
-    if (this.size === 1 && this.head.value === value) return true;
 
     let currentNode = this.head;
 
@@ -95,4 +94,80 @@ class LinkedList {
 
     return currentNode.value === value;
   }
+
+  find(value) {
+    if (this.head === null) return null;
+    
+    let currentNode = this.head;
+    let counter = 0;
+
+    while (currentNode.nextNode) {
+      if (currentNode.value === value) return counter;
+      currentNode = currentNode.nextNode;
+      counter++;
+    }
+
+    return currentNode.value === value ? counter : null;
+  }
+
+  toString() {
+    if (this.size === 0) return '';
+    let listString = '';
+
+    let currentNode = this.head;
+
+    do {
+      listString += `( ${currentNode.value} ) -> `;
+      currentNode = currentNode.nextNode;
+    } while (currentNode.nextNode);
+
+    listString += `( ${currentNode.value} ) -> `;
+    listString += 'null';
+    return listString;
+  }
+
+  insertAt(value, index) {
+    if (index < 0) return;
+    if (this.size === 0 && index != 0) return;
+    if (index > this.size) return;
+
+    let node = new Node();
+    node.value = value;
+
+    if (index === 0) {
+      this.prepend(value);
+      return;
+    } else if (index === this.size) {
+      this.append(value);
+      return;
+    }
+
+    let previousNode = this.head;
+    let currentNode = this.head.nextNode;
+    // currentNode is the one we are replacing
+    let counter = 1;
+
+    while (currentNode.nextNode) {
+      previousNode = currentNode;
+      currentNode = currentNode.nextNode;
+      counter++;
+      if (counter === index) break;
+    }
+
+    previousNode.nextNode = node;
+    node.nextNode = currentNode;
+    this.size += 1;
+  }
+
+  removeAt(index) {
+    // TODO
+  }
 }
+
+let list = new LinkedList();
+list.append(10);
+list.append(20);
+list.append(30);
+list.append(40);
+list.insertAt(15, 3);
+console.log(list.toString());
