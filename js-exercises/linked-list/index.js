@@ -70,8 +70,8 @@ class LinkedList {
     let endNode = this.head;
     let previousNode = null;
 
-    while (currentNode.nextNode) {
-      previousNode = currentNode;
+    while (endNode.nextNode) {
+      previousNode = endNode;
       endNode = endNode.nextNode;
     }
 
@@ -111,15 +111,15 @@ class LinkedList {
   }
 
   toString() {
-    if (this.size === 0) return '';
+    if (this.size === 0) return 'null';
     let listString = '';
 
     let currentNode = this.head;
 
-    do {
+    while (currentNode.nextNode) {
       listString += `( ${currentNode.value} ) -> `;
       currentNode = currentNode.nextNode;
-    } while (currentNode.nextNode);
+    }
 
     listString += `( ${currentNode.value} ) -> `;
     listString += 'null';
@@ -136,9 +136,11 @@ class LinkedList {
 
     if (index === 0) {
       this.prepend(value);
+      this.size += 1;
       return;
     } else if (index === this.size) {
       this.append(value);
+      this.size += 1;
       return;
     }
 
@@ -160,14 +162,44 @@ class LinkedList {
   }
 
   removeAt(index) {
-    // TODO
+    if (index < 0) return;
+    if (this.size === 0) return;
+    if (index > this.size - 1) return;
+    
+    if (index === 0) {
+      this.head = this.head.nextNode;
+      return;
+    } else if (index === this.size - 1) {
+      this.pop();
+      return;
+    }
+
+    let previousNode = this.head;
+    let currentNode = this.head.nextNode;
+    let counter = 1;
+
+    while (currentNode.nextNode) {
+      if (counter === index) break;
+      previousNode = currentNode;
+      currentNode = currentNode.nextNode;
+      counter++;
+    }
+
+    previousNode.nextNode = currentNode.nextNode;
+    this.size -= 1;
   }
 }
 
 let list = new LinkedList();
 list.append(10);
+console.log(list.toString());
 list.append(20);
+console.log(list.toString());
 list.append(30);
+console.log(list.toString());
 list.append(40);
+console.log(list.toString());
 list.insertAt(15, 3);
+console.log(list.toString());
+list.removeAt(4);
 console.log(list.toString());
