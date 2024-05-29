@@ -46,11 +46,11 @@ class LinkedList {
 
   at(index) {
     if (this.size === 0) return null;
-    if (index > this.size - 1) return null;
+    if (index > this.size - 1) return;
 
     let count = 0;
     let currentNode = this.head;
-    while (count < index) {
+    while (count != index) {
       currentNode = currentNode.nextNode;
       count++;
     }
@@ -126,7 +126,7 @@ class LinkedList {
     return listString;
   }
 
-  insertAt(value, index) {
+  insertAt(index, value) {
     if (index < 0) return;
     if (this.size === 0 && index != 0) return;
     if (index > this.size) return;
@@ -136,11 +136,9 @@ class LinkedList {
 
     if (index === 0) {
       this.prepend(value);
-      this.size += 1;
       return;
     } else if (index === this.size) {
       this.append(value);
-      this.size += 1;
       return;
     }
 
@@ -168,6 +166,7 @@ class LinkedList {
     
     if (index === 0) {
       this.head = this.head.nextNode;
+      this.size -= 1;
       return;
     } else if (index === this.size - 1) {
       this.pop();
@@ -190,16 +189,22 @@ class LinkedList {
   }
 }
 
-let list = new LinkedList();
-list.append(10);
-console.log(list.toString());
-list.append(20);
-console.log(list.toString());
-list.append(30);
-console.log(list.toString());
-list.append(40);
-console.log(list.toString());
-list.insertAt(15, 3);
-console.log(list.toString());
-list.removeAt(4);
-console.log(list.toString());
+// let list = new LinkedList();
+// console.log(list.toString());
+// list.append(10);
+// console.log(list.toString());
+// list.append(20);
+// console.log(list.toString());
+// list.append(30);
+// console.log(list.toString());
+// list.append(40);
+// console.log(list.toString());
+// list.insertAt(3, 15);
+// console.log(list.toString());
+// list.removeAt(4);
+// console.log(list.toString());
+// console.log('Does list contain 15?', list.contains(15));
+// console.log(list.toString());
+// console.log(list.at(3));
+// list.insertAt(0, 100);
+// console.log(list.toString());
