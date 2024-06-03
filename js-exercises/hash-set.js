@@ -1,6 +1,6 @@
 import { LinkedList } from './linked-list.js';
 
-export class HashMap {
+export class HashSet {
   constructor(capacity=10, loadFactor=0.75) {
     this.firstCapacity = capacity;
     this.capacity = capacity;
@@ -15,12 +15,12 @@ export class HashMap {
       .fill(null) // Won't work unless you do this
       .map(() => new LinkedList());
 
-    const pairs = this.entries();
+    const entries = this.entries();
     for (let i = 0; i < pairs.length; i++) {
-      let pair = pairs[i];
-      let index = this.#hash(pair[0], this.capacity*2);
+      let entry = entries[i];
+      let index = this.#hash(entry, this.capacity*2);
       let bucket = newBuckets[index];
-      bucket.append([pair[0], pair[1]]);
+      bucket.append(entry);
     }
     
     this.buckets = newBuckets;
@@ -46,7 +46,7 @@ export class HashMap {
     return bucketCount;
   }
 
-  set(key, value) {
+  set(key) {
     // If the array is too full, start expanding it and 'rehashing'
     const emptyNum = this.#getEmptyBucketAmount();
     const fullPercentage = (this.capacity - emptyNum) / this.capacity;
@@ -54,27 +54,9 @@ export class HashMap {
       this.#reconstruct();
     }
 
-    // Reassign value of key
-    if (this.has(key)) this.remove(key);
-
     const index = this.#hash(key);
     const bucket = this.buckets[index];
-    bucket.append([key, value]);
-  }
-
-  get(key) {
-    const index = this.#hash(key);
-    const bucket = this.buckets[index];
-
-    if (bucket.head === null) return null;
-
-    let currentNode = bucket.head;
-    while (currentNode.nextNode) {
-      if (currentNode.value[0] === key) break;
-      currentNode = currentNode.nextNode;
-    }
-
-    return currentNode.value[0] === key ? currentNode.value[1] : null;
+    bucket.append(key);
   }
 
   has(key) {
@@ -86,11 +68,11 @@ export class HashMap {
 
     let currentNode = bucket.head;
     while (currentNode.nextNode) {
-      if (currentNode.value[0] === key) break;
+      if (currentNode.value === key) break;
       currentNode = currentNode.nextNode;
     }
 
-    return currentNode.value[0] === key;
+    return currentNode.value === key;
   }
 
   remove(key) {
@@ -103,12 +85,12 @@ export class HashMap {
     let nodeIndex = 0;
 
     while (currentNode.nextNode) {
-      if (currentNode.value[0] === key) break;
+      if (currentNode.value === key) break;
       currentNode = currentNode.nextNode;
       nodeIndex++;
     }
 
-    if (currentNode.value[0] === key) {
+    if (currentNode.value === key) {
       bucket.removeAt(nodeIndex);
       return true;
     }
@@ -137,40 +119,6 @@ export class HashMap {
       .fill(null)
       .map(() => new LinkedList());
     this.capacity = this.firstCapacity;
-  }
-
-  keys() {
-    let keys = [];
-    for (let i = 0; i < this.capacity; i++) {
-      const bucket = this.buckets[i];
-      if (bucket.head === null) continue;
-
-      let currentNode = bucket.head;
-      keys.push(currentNode.value[0]);
-
-      while (currentNode.nextNode) {
-        keys.push(currentNode.value[0]);
-        currentNode = currentNode.nextNode;
-      }
-    }
-    return keys;
-  }
-
-  values() {
-    let values = [];
-    for (let i = 0; i < this.capacity; i++) {
-      const bucket = this.buckets[i];
-      if (bucket.head === null) continue;
-
-      let currentNode = bucket.head;
-      values.push(currentNode.value[1]);
-
-      while (currentNode.nextNode) {
-        values.push(currentNode.value[1]);
-        currentNode = currentNode.nextNode;
-      }
-    }
-    return values;
   }
 
   entries() {
