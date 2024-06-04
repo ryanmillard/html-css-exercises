@@ -47,4 +47,6 @@ let set = new HashSet();
 console.log(set);
 set.set("hi");
 console.log(set);
-console.log(set.has("hi"));
+console.log(set.has("hi"), set.length());
+set.remove("hi");
+console.log(set.has("hi"), set.length());
