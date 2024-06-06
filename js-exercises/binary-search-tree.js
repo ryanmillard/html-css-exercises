@@ -6,7 +6,7 @@ class Node {
   }
 }
 
-class Tree {
+export class Tree {
   constructor() {
     this.root = null;
   }
@@ -29,7 +29,21 @@ class Tree {
         // Go left
         if (value < currentNode.value) {
           if (currentNode.left === null) {
-            
+            let node = new Node();
+            node.value = value;
+            currentNode.left = node;
+            positionFound = true;
+          } else {
+            currentNode = currentNode.left;
+          }
+        } else {
+          if (currentNode.right === null) {
+            let node = new Node();
+            node.value = value;
+            currentNode.right = node;
+            positionFound = true;
+          } else {
+            currentNode = currentNode.right;
           }
         }
       }

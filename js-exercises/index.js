@@ -1,5 +1,6 @@
-import { HashMap } from './hash-map.js';
-import { HashSet } from './hash-set.js';
+// import { HashMap } from './hash-map.js';
+// import { HashSet } from './hash-set.js';
+import { Tree } from './binary-search-tree.js';
 
 // let dict = new HashMap();
 // console.log(dict);
@@ -43,10 +44,13 @@ import { HashSet } from './hash-set.js';
 // console.log(dict);
 // console.log(dict.length());
 
-let set = new HashSet();
-console.log(set);
-set.set("hi");
-console.log(set);
-console.log(set.has("hi"), set.length());
-set.remove("hi");
-console.log(set.has("hi"), set.length());
+// let set = new HashSet();
+// console.log(set);
+// set.set("hi");
+// console.log(set);
+// console.log(set.has("hi"), set.length());
+// set.remove("hi");
+// console.log(set.has("hi"), set.length());
+
+let tree = new Tree();
+tree.buildTree([2,7,0,1,4,777,204235]);
