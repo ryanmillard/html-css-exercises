@@ -53,4 +53,5 @@ import { Tree } from './binary-search-tree.js';
 // console.log(set.has("hi"), set.length());
 
 let tree = new Tree();
-tree.buildTree([2,7,0,1,4,777,204235]);
+tree.buildTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+tree.printTree();
