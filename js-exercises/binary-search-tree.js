@@ -69,13 +69,11 @@ export class Tree {
       if (!currentNode) return; // Node doesn't exist
       if (value === currentNode.value) break; // Node found
       previousNode = currentNode;
-      currentNode = value < currentNode.value ?
-        currentNode.left :
-        currentNode.right;
       connectionDirection = value < currentNode.value ? 'left' : 'right';
+      currentNode = currentNode[connectionDirection];
     }
 
-    if ( // Case 1 - No Children
+    if ( // Case 1: No Children
       currentNode.left === null
       && currentNode.right === null
       && currentNode.value === value
@@ -85,7 +83,7 @@ export class Tree {
       } else {
         previousNode[connectionDirection] = null;
       }
-    } else if ( // Case 2 - 1 Child
+    } else if ( // Case 2: 1 Child
       currentNode.left === null && currentNode.right !== null
       || currentNode.left !== null && currentNode.right === null
     ) {
@@ -94,11 +92,30 @@ export class Tree {
       
       // Deletes currentNode
       previousNode[connectionDirection] = childNode;
-    } else { // Case 3 - 2 Children
+    } else { // Case 3: 2 Children
       // go first right node of currentNode
       // then go furthest left of that node to
       // find closest value to currentNodes value.
-      // if that value has children then sort it out.
+      // if that value has children then sort it out
+      // by deleting it and putting that value on
+      // currentNodes value then sorting out children
+
+      let closestValue = currentNode.right;
+      let closestValueParent = null;
+      while (closestValue.left !== null) {
+        closestValueParent = closestValue;
+        closestValue = closestValue.left;
+      }
+
+      currentNode.value = closestValue.value;
+
+      // Remove closestValue node and move its child.
+      // Won't have a left child because it's the furthest left node
+      if (closestValueParent !== null) {
+        closestValueParent.left = closestValue.right;
+      } else {
+        currentNode.right = closestValue.right;
+      }
     }
   }
 
