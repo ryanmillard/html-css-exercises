@@ -93,12 +93,10 @@ export class Tree {
       // Deletes currentNode
       previousNode[connectionDirection] = childNode;
     } else { // Case 3: 2 Children
-      // go first right node of currentNode
-      // then go furthest left of that node to
-      // find closest value to currentNodes value.
-      // if that value has children then sort it out
-      // by deleting it and putting that value on
-      // currentNodes value then sorting out children
+      // 1. Go to the right child node of currentNode
+      // 2. Then go to the furthest left descendant of that child
+      // Which will find closest value to currentNodes value.
+      // 3. If that closest value node has a child then reparent it.
 
       let closestValue = currentNode.right;
       let closestValueParent = null;
@@ -111,6 +109,7 @@ export class Tree {
 
       // Remove closestValue node and move its child.
       // Won't have a left child because it's the furthest left node
+      // also account for if first right node didn't have a left child
       if (closestValueParent !== null) {
         closestValueParent.left = closestValue.right;
       } else {
@@ -137,5 +136,89 @@ export class Tree {
     if (node.left !== null) {
       this.printTree(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
+  }
+
+  find(value) {
+    let currentNode = this.root;
+    while (true) {
+      if (!currentNode) return null; // Node doesn't exist
+      if (value === currentNode.value) break; // Node found
+      previousNode = currentNode;
+      currentNode = currentNode[value < currentNode.value ? 'left' : 'right'];
+    }
+    return currentNode;
+  }
+
+  levelOrder(callback) {
+    if (this.root === null) return [];
+    let queue = [this.root];
+    let levelOrderValues = [];
+    let isValidCallback = typeof callback === "function";
+    let currentNode;
+
+    while (queue.length !== 0) {
+      currentNode = queue[0];
+
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+
+      if (isValidCallback) {
+        callback(currentNode);
+      } else {
+        levelOrderValues.push(currentNode.value);
+      }
+
+      queue.shift();
+    }
+
+    if (!isValidCallback) return levelOrderValues;
+  }
+
+  inOrder(callback) {
+    let inOrderValues = [];
+    let isValidCallback = typeof callback === "function";
+
+    function traverse(node) {
+      if (!node) return;
+      traverse(node.left);
+      inOrderValues.push(node.value);
+      if (isValidCallback) callback(node);
+      traverse(node.right);
+    }
+
+    traverse(this.root);
+    return inOrderValues;
+  }
+
+  postOrder(callback) {
+    let postOrderValues = [];
+    let isValidCallback = typeof callback === "function";
+
+    function traverse(node) {
+      if (!node) return;
+      traverse(node.left);
+      traverse(node.right);
+      postOrderValues.push(node.value);
+      if (isValidCallback) callback(node);
+    }
+
+    traverse(this.root);
+    return postOrderValues;
+  }
+  
+  preOrder(callback) {
+    let preOrderValues = [];
+    let isValidCallback = typeof callback === "function";
+
+    function traverse(node) {
+      if (!node) return;
+      preOrderValues.push(node.value);
+      if (isValidCallback) callback(node);
+      traverse(node.left);
+      traverse(node.right);
+    }
+
+    traverse(this.root);
+    return preOrderValues;
   }
 }
