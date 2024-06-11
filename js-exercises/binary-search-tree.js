@@ -118,11 +118,21 @@ export class Tree {
     }
   }
 
+  #addMiddleNode(array, start, end) {
+    if (start > end) return;
+    let midIndex = Math.floor((start + end) / 2);
+    let midValue = array[midIndex];
+    if (midValue === undefined) return;
+    this.insert(midValue);
+
+    this.#addMiddleNode(array, start, midIndex-1); // Go left
+    this.#addMiddleNode(array, midIndex+1, end); // Go right
+  }
+
   buildTree(array) {
-    for (let i = 0; i < array.length; i++) {
-      let value = array[i];
-      this.insert(value);
-    }
+    this.root = null; // Reset BST root
+    array = array.sort((a,b) => a-b); // Sort into ascending order
+    this.#addMiddleNode(array, 0, array.length);
   }
 
   printTree(node=this.root, prefix = "", isLeft = true) {
@@ -255,4 +265,20 @@ export class Tree {
 
     return nodeDepth;
   }
+
+  isBalanced() {
+    let leftSubtree = this.root.left;
+    let rightSubtree = this.root.right;
+    let leftHeight = leftSubtree === null ? 0 : this.height(leftSubtree);
+    let rightHeight = rightSubtree === null ? 0 : this.height(rightSubtree);
+    return Math.abs(leftHeight - rightHeight) <= 1;
+  }
+
+  rebalance() {
+    if (this.isBalanced()) return; // Ignore if tree is already balanced
+    let inOrderValues = this.inOrder();
+    console.log("in", this.inOrder());
+    this.buildTree(inOrderValues);
+  }
 }
+
