@@ -143,8 +143,8 @@ export class Tree {
     while (true) {
       if (!currentNode) return null; // Node doesn't exist
       if (value === currentNode.value) break; // Node found
-      previousNode = currentNode;
-      currentNode = currentNode[value < currentNode.value ? 'left' : 'right'];
+      let direction = value < currentNode.value ? 'left' : 'right';
+      currentNode = currentNode[direction];
     }
     return currentNode;
   }
@@ -220,5 +220,39 @@ export class Tree {
 
     traverse(this.root);
     return preOrderValues;
+  }
+
+  height(node) {
+    // Height is defined as the number of edges in the
+    // longest path from a given node to a leaf node.
+
+    if (!node) return null;
+    let largestHeight = 0;
+
+    function traverse(node, height) {
+      if (node.left === null && node.right === null) return; // Leaf node
+      height++; // Increase height by one as node has been traversed
+      if (largestHeight < height) largestHeight = height;
+      if (node.left !== null) traverse(node.left, height);
+      if (node.right !== null) traverse(node.right, height);
+    }
+
+    traverse(node, 0);
+    return largestHeight;
+  }
+
+  depth(node) {
+    let currentNode = this.root;
+    let nodeDepth = 0;
+    
+    while (true) {
+      if (!currentNode) return; // Node doesn't exist
+      if (node.value === currentNode.value) break; // Node found
+      let direction = node.value < currentNode.value ? 'left' : 'right';
+      currentNode = currentNode[direction];
+      nodeDepth++;
+    }
+
+    return nodeDepth;
   }
 }
