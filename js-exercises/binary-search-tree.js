@@ -277,7 +277,6 @@ export class Tree {
   rebalance() {
     if (this.isBalanced()) return; // Ignore if tree is already balanced
     let inOrderValues = this.inOrder();
-    console.log("in", this.inOrder());
     this.buildTree(inOrderValues);
   }
 }

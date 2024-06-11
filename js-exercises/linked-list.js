@@ -4,6 +4,7 @@ class Node {
     this.nextNode = null;
   }
 }
+
 export class LinkedList {
   constructor() {
     this.head = null;
